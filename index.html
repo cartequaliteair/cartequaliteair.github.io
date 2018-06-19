@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet-svg-shape-markers.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet.wms.js"></script>
+        <script src="js/proj4.js"></script>
+        <script src="js/proj4leaflet.js"></script>
+        <script src="data/LimitesdelargionIledeFrance_2.js"></script>
+        <script src="data/Limitesdesdpartements_3.js"></script>
+        <script src="data/LimitesdelaMtropoleduGrandParis_4.js"></script>
+        <script src="data/RgionIledeFrance_5.js"></script>
+        <script src="data/MtropoleduGrandParis_6.js"></script>
+        <script src="data/Dpartements_7.js"></script>
+        <script src="data/Communautsdagglomrationoudecommunes_8.js"></script>
+        <script src="data/Etablissementspublicsterritoriaux_9.js"></script>
+        <script src="data/Communes_10.js"></script>
+        <script>
+        var crs = new L.Proj.CRS('EPSG:2154', '+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', {
+            resolutions: [2800, 1400, 700, 350, 175, 84, 42, 21, 11.2, 5.6, 2.8, 1.4, 0.7, 0.35, 0.14, 0.07],
+        });
+        var map = L.map('map', {
+            crs: crs,
+            continuousWorld: false,
+            worldCopyJump: false, 
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[47.9671068705,1.23535784813],[49.386055484,3.80498163724]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.addAttribution('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a>');
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        var overlay_Rseauroutier_0 = L.WMS.layer("http://georef.application.i2/cartes/mapserv", "reseau_routier", {
+            format: 'image/png',
+            uppercase: true,
+            transparent: true,
+            continuousWorld : true,
+            tiled: true,
+            info_format: 'text/html',
+            opacity: 1,
+            identify: false,
+        });
+        map.addLayer(overlay_Rseauroutier_0);
+        var overlay_Rseauhydrographique_1 = L.WMS.layer("http://georef.application.i2/cartes/mapserv", "reseau_hydrographique", {
+            format: 'image/png',
+            uppercase: true,
+            transparent: true,
+            continuousWorld : true,
+            tiled: true,
+            info_format: 'text/html',
+            opacity: 1,
+            identify: false,
+        });
+        map.addLayer(overlay_Rseauhydrographique_1);
+        function pop_LimitesdelargionIledeFrance_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Nom</strong><br />' + (feature.properties['Nom'] !== null ? Autolinker.link(String(feature.properties['Nom'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Structure</strong><br />' + (feature.properties['Structure'] !== null ? Autolinker.link(String(feature.properties['Structure'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>LIEN</strong><br />' + (feature.properties['LIEN'] !== null ? Autolinker.link(String(feature.properties['LIEN'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Page 1</strong><br />' + (feature.properties['FICHE'] !== null ? '<img src="images/' + String(feature.properties['FICHE']).replace(/[\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Page 2</strong><br />' + (feature.properties['FICHE2'] !== null ? '<img src="images/' + String(feature.properties['FICHE2']).replace(/[\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_LimitesdelargionIledeFrance_2_0() {
+            return {
+                pane: 'pane_LimitesdelargionIledeFrance_2',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 3.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(57,93,239,0.0)',
+            }
+        }
+        map.createPane('pane_LimitesdelargionIledeFrance_2');
+        map.getPane('pane_LimitesdelargionIledeFrance_2').style.zIndex = 402;
+        map.getPane('pane_LimitesdelargionIledeFrance_2').style['mix-blend-mode'] = 'normal';
+        var layer_LimitesdelargionIledeFrance_2 = new L.geoJson(json_LimitesdelargionIledeFrance_2, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_LimitesdelargionIledeFrance_2',
+            onEachFeature: pop_LimitesdelargionIledeFrance_2,
+            style: style_LimitesdelargionIledeFrance_2_0,
+        });
+        bounds_group.addLayer(layer_LimitesdelargionIledeFrance_2);
+        map.addLayer(layer_LimitesdelargionIledeFrance_2);
+        function pop_Limitesdesdpartements_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Nom</strong><br />' + (feature.properties['Nom'] !== null ? Autolinker.link(String(feature.properties['Nom'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Structure</strong><br />' + (feature.properties['Structure'] !== null ? Autolinker.link(String(feature.properties['Structure'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>LIEN</strong><br />' + (feature.properties['LIEN'] !== null ? Autolinker.link(String(feature.properties['LIEN'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Page 1</strong><br />' + (feature.properties['FICHE'] !== null ? '<img src="images/' + String(feature.properties['FICHE']).replace(/[\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Page 2</strong><br />' + (feature.properties['FICHE2'] !== null ? '<img src="images/' + String(feature.properties['FICHE2']).replace(/[\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Limitesdesdpartements_3_0() {
+            return {
+                pane: 'pane_Limitesdesdpartements_3',
+                opacity: 1,
+                color: 'rgba(227,26,28,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 3.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(173,176,103,0.0)',
+            }
+        }
+        map.createPane('pane_Limitesdesdpartements_3');
+        map.getPane('pane_Limitesdesdpartements_3').style.zIndex = 403;
+        map.getPane('pane_Limitesdesdpartements_3').style['mix-blend-mode'] = 'normal';
+        var layer_Limitesdesdpartements_3 = new L.geoJson(json_Limitesdesdpartements_3, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_Limitesdesdpartements_3',
+            onEachFeature: pop_Limitesdesdpartements_3,
+            style: style_Limitesdesdpartements_3_0,
+        });
+        bounds_group.addLayer(layer_Limitesdesdpartements_3);
+        map.addLayer(layer_Limitesdesdpartements_3);
+        function pop_LimitesdelaMtropoleduGrandParis_4(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Nom</strong><br />' + (feature.properties['Nom'] !== null ? Autolinker.link(String(feature.properties['Nom'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Structure</strong><br />' + (feature.properties['Structure'] !== null ? Autolinker.link(String(feature.properties['Structure'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>LIEN</strong><br />' + (feature.properties['LIEN'] !== null ? Autolinker.link(String(feature.properties['LIEN'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Page 1</strong><br />' + (feature.properties['FICHE'] !== null ? '<img src="images/' + String(feature.properties['FICHE']).replace(/[\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Page 2</strong><br />' + (feature.properties['FICHE2'] !== null ? '<img src="images/' + String(feature.properties['FICHE2']).replace(/[\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_LimitesdelaMtropoleduGrandParis_4_0() {
+            return {
+                pane: 'pane_LimitesdelaMtropoleduGrandParis_4',
+                opacity: 1,
+                color: 'rgba(0,0,0,0.2)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 3.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(227,224,25,0.2)',
+            }
+        }
+        map.createPane('pane_LimitesdelaMtropoleduGrandParis_4');
+        map.getPane('pane_LimitesdelaMtropoleduGrandParis_4').style.zIndex = 404;
+        map.getPane('pane_LimitesdelaMtropoleduGrandParis_4').style['mix-blend-mode'] = 'normal';
+        var layer_LimitesdelaMtropoleduGrandParis_4 = new L.geoJson(json_LimitesdelaMtropoleduGrandParis_4, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_LimitesdelaMtropoleduGrandParis_4',
+            onEachFeature: pop_LimitesdelaMtropoleduGrandParis_4,
+            style: style_LimitesdelaMtropoleduGrandParis_4_0,
+        });
+        bounds_group.addLayer(layer_LimitesdelaMtropoleduGrandParis_4);
+        map.addLayer(layer_LimitesdelaMtropoleduGrandParis_4);
+        function pop_RgionIledeFrance_5(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Nom</strong><br />' + (feature.properties['Nom'] !== null ? Autolinker.link(String(feature.properties['Nom'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Structure</strong><br />' + (feature.properties['Structure'] !== null ? Autolinker.link(String(feature.properties['Structure'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>LIEN</strong><br />' + (feature.properties['LIEN'] !== null ? Autolinker.link(String(feature.properties['LIEN'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Page 1</strong><br />' + (feature.properties['FICHE'] !== null ? '<img src="images/' + String(feature.properties['FICHE']).replace(/[\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Page 2</strong><br />' + (feature.properties['FICHE2'] !== null ? '<img src="images/' + String(feature.properties['FICHE2']).replace(/[\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_RgionIledeFrance_5_0() {
+            return {
+                pane: 'pane_RgionIledeFrance_5',
+                radius: 8.8,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(151,219,254,1.0)',
+            }
+        }
+        map.createPane('pane_RgionIledeFrance_5');
+        map.getPane('pane_RgionIledeFrance_5').style.zIndex = 405;
+        map.getPane('pane_RgionIledeFrance_5').style['mix-blend-mode'] = 'normal';
+        var layer_RgionIledeFrance_5 = new L.geoJson(json_RgionIledeFrance_5, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_RgionIledeFrance_5',
+            onEachFeature: pop_RgionIledeFrance_5,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_RgionIledeFrance_5_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_RgionIledeFrance_5);
+        map.addLayer(layer_RgionIledeFrance_5);
+        function pop_MtropoleduGrandParis_6(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Nom</strong><br />' + (feature.properties['Nom'] !== null ? Autolinker.link(String(feature.properties['Nom'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Structure</strong><br />' + (feature.properties['Structure'] !== null ? Autolinker.link(String(feature.properties['Structure'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>LIEN</strong><br />' + (feature.properties['LIEN'] !== null ? Autolinker.link(String(feature.properties['LIEN'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Page 1</strong><br />' + (feature.properties['FICHE'] !== null ? '<img src="images/' + String(feature.properties['FICHE']).replace(/[\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Page 2</strong><br />' + (feature.properties['FICHE2'] !== null ? '<img src="images/' + String(feature.properties['FICHE2']).replace(/[\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_MtropoleduGrandParis_6_0() {
+            return {
+                pane: 'pane_MtropoleduGrandParis_6',
+                shape: 'triangle',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(31,120,180,1.0)',
+            }
+        }
+        map.createPane('pane_MtropoleduGrandParis_6');
+        map.getPane('pane_MtropoleduGrandParis_6').style.zIndex = 406;
+        map.getPane('pane_MtropoleduGrandParis_6').style['mix-blend-mode'] = 'normal';
+        var layer_MtropoleduGrandParis_6 = new L.geoJson(json_MtropoleduGrandParis_6, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_MtropoleduGrandParis_6',
+            onEachFeature: pop_MtropoleduGrandParis_6,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_MtropoleduGrandParis_6_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_MtropoleduGrandParis_6);
+        map.addLayer(layer_MtropoleduGrandParis_6);
+        function pop_Dpartements_7(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Nom</strong><br />' + (feature.properties['Nom'] !== null ? Autolinker.link(String(feature.properties['Nom'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Structure</strong><br />' + (feature.properties['Structure'] !== null ? Autolinker.link(String(feature.properties['Structure'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>LIEN</strong><br />' + (feature.properties['LIEN'] !== null ? Autolinker.link(String(feature.properties['LIEN'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Page 1</strong><br />' + (feature.properties['FICHE'] !== null ? '<img src="images/' + String(feature.properties['FICHE']).replace(/[\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Page 2</strong><br />' + (feature.properties['FICHE2'] !== null ? '<img src="images/' + String(feature.properties['FICHE2']).replace(/[\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Dpartements_7_0() {
+            return {
+                pane: 'pane_Dpartements_7',
+                shape: 'triangle',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(160,15,244,1.0)',
+            }
+        }
+        map.createPane('pane_Dpartements_7');
+        map.getPane('pane_Dpartements_7').style.zIndex = 407;
+        map.getPane('pane_Dpartements_7').style['mix-blend-mode'] = 'normal';
+        var layer_Dpartements_7 = new L.geoJson(json_Dpartements_7, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_Dpartements_7',
+            onEachFeature: pop_Dpartements_7,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_Dpartements_7_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Dpartements_7);
+        map.addLayer(layer_Dpartements_7);
+        function pop_Communautsdagglomrationoudecommunes_8(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Nom</strong><br />' + (feature.properties['Nom'] !== null ? Autolinker.link(String(feature.properties['Nom'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Structure</strong><br />' + (feature.properties['Structure'] !== null ? Autolinker.link(String(feature.properties['Structure'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>LIEN</strong><br />' + (feature.properties['LIEN'] !== null ? Autolinker.link(String(feature.properties['LIEN'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Page 1</strong><br />' + (feature.properties['FICHE'] !== null ? '<img src="images/' + String(feature.properties['FICHE']).replace(/[\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Page 2</strong><br />' + (feature.properties['FICHE2'] !== null ? '<img src="images/' + String(feature.properties['FICHE2']).replace(/[\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Communautsdagglomrationoudecommunes_8_0() {
+            return {
+                pane: 'pane_Communautsdagglomrationoudecommunes_8',
+                shape: 'triangle',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(51,160,44,1.0)',
+            }
+        }
+        map.createPane('pane_Communautsdagglomrationoudecommunes_8');
+        map.getPane('pane_Communautsdagglomrationoudecommunes_8').style.zIndex = 408;
+        map.getPane('pane_Communautsdagglomrationoudecommunes_8').style['mix-blend-mode'] = 'normal';
+        var layer_Communautsdagglomrationoudecommunes_8 = new L.geoJson(json_Communautsdagglomrationoudecommunes_8, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_Communautsdagglomrationoudecommunes_8',
+            onEachFeature: pop_Communautsdagglomrationoudecommunes_8,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_Communautsdagglomrationoudecommunes_8_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Communautsdagglomrationoudecommunes_8);
+        map.addLayer(layer_Communautsdagglomrationoudecommunes_8);
+        function pop_Etablissementspublicsterritoriaux_9(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Nom</strong><br />' + (feature.properties['Nom'] !== null ? Autolinker.link(String(feature.properties['Nom'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Structure</strong><br />' + (feature.properties['Structure'] !== null ? Autolinker.link(String(feature.properties['Structure'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>LIEN</strong><br />' + (feature.properties['LIEN'] !== null ? Autolinker.link(String(feature.properties['LIEN'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Page 1</strong><br />' + (feature.properties['FICHE'] !== null ? '<img src="images/' + String(feature.properties['FICHE']).replace(/[\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Page 2</strong><br />' + (feature.properties['FICHE2'] !== null ? '<img src="images/' + String(feature.properties['FICHE2']).replace(/[\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Etablissementspublicsterritoriaux_9_0() {
+            return {
+                pane: 'pane_Etablissementspublicsterritoriaux_9',
+                shape: 'diamond',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,127,0,1.0)',
+            }
+        }
+        map.createPane('pane_Etablissementspublicsterritoriaux_9');
+        map.getPane('pane_Etablissementspublicsterritoriaux_9').style.zIndex = 409;
+        map.getPane('pane_Etablissementspublicsterritoriaux_9').style['mix-blend-mode'] = 'normal';
+        var layer_Etablissementspublicsterritoriaux_9 = new L.geoJson(json_Etablissementspublicsterritoriaux_9, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_Etablissementspublicsterritoriaux_9',
+            onEachFeature: pop_Etablissementspublicsterritoriaux_9,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_Etablissementspublicsterritoriaux_9_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Etablissementspublicsterritoriaux_9);
+        map.addLayer(layer_Etablissementspublicsterritoriaux_9);
+        function pop_Communes_10(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Nom</strong><br />' + (feature.properties['Nom'] !== null ? Autolinker.link(String(feature.properties['Nom'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Structure</strong><br />' + (feature.properties['Structure'] !== null ? Autolinker.link(String(feature.properties['Structure'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>LIEN</strong><br />' + (feature.properties['LIEN'] !== null ? Autolinker.link(String(feature.properties['LIEN'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Page 1</strong><br />' + (feature.properties['FICHE'] !== null ? '<img src="images/' + String(feature.properties['FICHE']).replace(/[\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Page 2</strong><br />' + (feature.properties['FICHE2'] !== null ? '<img src="images/' + String(feature.properties['FICHE2']).replace(/[\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Communes_10_0() {
+            return {
+                pane: 'pane_Communes_10',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(227,26,28,1.0)',
+            }
+        }
+        map.createPane('pane_Communes_10');
+        map.getPane('pane_Communes_10').style.zIndex = 410;
+        map.getPane('pane_Communes_10').style['mix-blend-mode'] = 'normal';
+        var layer_Communes_10 = new L.geoJson(json_Communes_10, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_Communes_10',
+            onEachFeature: pop_Communes_10,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Communes_10_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Communes_10);
+        map.addLayer(layer_Communes_10);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/Communes_10.png" /> Communes': layer_Communes_10,'<img src="legend/Etablissementspublicsterritoriaux_9.png" /> Etablissements publics territoriaux': layer_Etablissementspublicsterritoriaux_9,'<img src="legend/Communautsdagglomrationoudecommunes_8.png" /> Communautés d\'agglomération ou de communes': layer_Communautsdagglomrationoudecommunes_8,'<img src="legend/Dpartements_7.png" /> Départements': layer_Dpartements_7,'<img src="legend/MtropoleduGrandParis_6.png" /> Métropole du Grand Paris': layer_MtropoleduGrandParis_6,'<img src="legend/RgionIledeFrance_5.png" /> Région Ile-de-France': layer_RgionIledeFrance_5,'<img src="legend/LimitesdelaMtropoleduGrandParis_4.png" /> Limites de la Métropole du Grand Paris': layer_LimitesdelaMtropoleduGrandParis_4,'<img src="legend/Limitesdesdpartements_3.png" /> Limites des départements': layer_Limitesdesdpartements_3,'<img src="legend/LimitesdelargionIledeFrance_2.png" /> Limites de la région Ile-de-France': layer_LimitesdelargionIledeFrance_2,"Réseau hydrographique": overlay_Rseauhydrographique_1,"Réseau routier": overlay_Rseauroutier_0,},{collapsed:false}).addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
